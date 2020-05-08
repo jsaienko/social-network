@@ -16,9 +16,7 @@ const fetchPosts = createAsyncThunk(
 const likePost = createAsyncThunk(
     'posts/likePost',
     async (postId, thunkAPI) => {
-        console.log( `postId in async thunk: ${postId}`);
-        const response = await apiClient.post(`/api/posts/${postId}`);
-        console.log(`response: ${response}, response data: ${response.data}`);
+        const response = await apiClient.post(`/api/posts/${postId}/like`);
         return response.data
     },
     {
@@ -51,7 +49,13 @@ const postsSlice = createSlice({
         },
         [likePost.fulfilled]: (state, action) => {
             state.isLoading = false;
-            console.log( `action payload: ${action.payload}`);
+            let likedPost = state.posts.find(post=> post._id === action.payload._id);
+            let index = state.posts.indexOf(likedPost);
+
+            if (index !== -1) {
+                state.posts[index].likes = action.payload.likes;
+                state.posts[index].likesNumber = action.payload.likesNumber;
+            }
 
         },
     }

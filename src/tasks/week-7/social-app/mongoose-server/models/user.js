@@ -19,7 +19,11 @@ const UserSchema = mongoose.Schema({
     },
     first_name: String,
     last_name: String,
-    age: Number
+    age: Number,
+    friends: [{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Friends'
+    }]
 });
 
 
